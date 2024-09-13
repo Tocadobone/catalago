@@ -63,3 +63,18 @@
 .bi-whatsapp {
   margin-right: 5px;
 }
+
+@media (max-width: 1280px) {
+  .logo {
+    display: flex;
+    margin: 32px 0 0 32px;
+  }
+
+  .logo h1 {
+    font-size: 22px;
+  }
+
+  .logo p {
+    font-size: 14px;
+  }
+}
