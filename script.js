@@ -4,11 +4,13 @@ const precoAtacado = 18.0; // Defina o valor de atacado aqui
 const aparecerPrecoVarejo = false; // Defina como true ou false para mostrar ou esconder o preço de varejo
 const aparecerPrecoAtacado = false; // Defina como true ou false para mostrar ou esconder o preço de atacado
 
-const numeroCelular = "43999247640"; // Número de WhatsApp
+const numeroCelular = "5543999247640"; // Número de WhatsApp
 const mensagemWhatsApp = "Olá, vim do seu catálogo."; // Mensagem de WhatsApp
+const mostrarNumeroCelular = true; // Defina como true ou false para mostrar ou esconder o número de celular
 
 const nomeEmpresa = "Toca do Boné"; // Nome da empresa
 const logoUrl = "./assets/logo.jpg"; // URL do logo
+const mostrarLogo = true; // Defina como true ou false para mostrar ou esconder o logo
 
 const options = {
   method: "POST",
@@ -16,19 +18,36 @@ const options = {
     "Content-Type": "application/json",
     "Shop-Code": "648669",
   },
-  body: '{"filter":{"stockControl":true,"page":1,"perPage":500,"category":"","subCategory":"","search":null,"sort":{"ProductName":1},"onlyPromo":false}}',
+  body: JSON.stringify({
+    filter: {
+      stockControl: true,
+      page: 1,
+      perPage: 500,
+      category: "",
+      subCategory: "",
+      search: null,
+      sort: { ProductName: 1 },
+      onlyPromo: false,
+    },
+  }),
 };
 
-let productList = [];
+let bonesPremiumProductList = [];
 
-fetch("https://api.ecommerce.nextar.com/prod/api/products", options)
-  .then((response) => response.json())
-  .then((data) => {
-    productList = data.list; // Salvar a lista de produtos
-    displayProducts(productList); // Exibir produtos inicialmente
-  })
-  .catch((err) => console.error(err));
+// Função para buscar e exibir os produtos da API Bones Premium
+function fetchBonesPremiumProducts() {
+  fetch("https://api.ecommerce.nextar.com/prod/api/products", options)
+    .then((response) => response.json())
+    .then((data) => {
+      bonesPremiumProductList = data.list; // Salvar a lista de produtos
+      displayProducts(bonesPremiumProductList); // Exibir produtos
+    })
+    .catch((err) =>
+      console.error("Erro ao buscar produtos Bones Premium:", err)
+    );
+}
 
+// Função para exibir os produtos
 function displayProducts(products) {
   const container = document.getElementById("product-container");
   container.innerHTML = ""; // Limpar o container antes de exibir os produtos
@@ -98,22 +117,53 @@ function displayProducts(products) {
     productDiv.appendChild(namePara);
     productDiv.appendChild(priceContainer); // Adiciona os preços abaixo do nome
     productDiv.appendChild(codePara);
-    productDiv.appendChild(contactButton);
+    if (mostrarNumeroCelular) {
+      productDiv.appendChild(contactButton); // Adiciona o botão de contato se a variável estiver true
+    }
 
     container.appendChild(productDiv);
   });
 }
 
-document.getElementById("search-input").addEventListener("input", (event) => {
-  const searchTerm = event.target.value.toLowerCase();
-  const filteredProducts = productList.filter((product) =>
-    product.ProductName.toLowerCase().includes(searchTerm)
-  );
-  displayProducts(filteredProducts);
-});
-
-// Atualiza o HTML da página com o nome e o logo da empresa
+// Configuração inicial quando a página carrega
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelector(".logo img").src = logoUrl;
+  fetchBonesPremiumProducts(); // Buscar e exibir produtos ao carregar a página
+
+  document.getElementById("bones-premium-btn").addEventListener("click", () => {
+    fetchBonesPremiumProducts(); // Atualizar produtos ao clicar no botão "Bones Premium"
+  });
+
+  document.getElementById("search-input").addEventListener("input", (event) => {
+    const searchTerm = event.target.value.toLowerCase();
+    const filteredProducts = bonesPremiumProductList.filter((product) =>
+      product.ProductName.toLowerCase().includes(searchTerm)
+    );
+
+    displayProducts(filteredProducts);
+  });
+
+  // Atualiza o HTML da página com o nome e o logo da empresa
+  const logoContainer = document.querySelector(".logo");
+
+  if (mostrarLogo) {
+    const logoImg = logoContainer.querySelector("img");
+    if (logoImg) {
+      logoImg.src = logoUrl;
+      logoImg.alt = nomeEmpresa;
+    } else {
+      const newLogoImg = document.createElement("img");
+      newLogoImg.src = logoUrl;
+      newLogoImg.alt = nomeEmpresa;
+      newLogoImg.classList.add("img-fluid");
+      logoContainer.prepend(newLogoImg);
+    }
+  } else {
+    // Remove a logo se mostrarLogo for false
+    const logoImg = logoContainer.querySelector("img");
+    if (logoImg) {
+      logoImg.remove();
+    }
+  }
+
   document.querySelector(".logo h1").textContent = nomeEmpresa;
 });

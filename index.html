@@ -24,22 +24,30 @@
   </head>
   <body>
     <div class="nav">
-      <div
-        class="logo container-lg d-flex align-items-center justify-content-between"
-      >
-        <div class="d-flex align-items-center">
-          <img alt="logo" />
-          <div>
-            <h1></h1>
-            <p>Catálogo Online</p>
-          </div>
+      <div class="logo container-lg">
+        <img alt="logo" />
+        <div>
+          <h1></h1>
+          <p>Catálogo Online</p>
         </div>
-        <input
-          type="text"
-          id="search-input"
-          class="form-control search-input"
-          placeholder="Pesquisar por nome ou cores..."
-        />
+        <div class="search-container">
+          <input
+            type="text"
+            id="search-input"
+            class="form-control"
+            placeholder="Pesquisar por nome ou cores..."
+          />
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="d-flex justify-content-center mb-4">
+        <button id="bones-premium-btn" class="btn btn-primary me-2">
+          Bones Premium
+        </button>
+        <button id="camisetas-peruanas-btn" class="btn btn-secondary">
+          Camisetas Peruanas 40.1
+        </button>
       </div>
     </div>
 
@@ -48,5 +56,6 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="api.js"></script>
   </body>
 </html>

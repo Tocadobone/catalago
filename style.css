@@ -13,13 +13,13 @@ body {
   background: #f8f7f3;
   height: auto;
   padding: 10px 0;
+  margin-bottom: 34px;
 }
 
 .logo {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .logo img {
@@ -40,8 +40,15 @@ body {
   color: #5e5e5e;
 }
 
+.search-container {
+  margin-left: auto;
+  max-width: 400px;
+  flex: 1;
+  padding-left: 20px; /* Adiciona um espaço à esquerda da barra de pesquisa */
+}
+
 .search-input {
-  max-width: 300px;
+  max-width: 100%;
   margin-top: 10px;
 }
 
@@ -110,6 +117,44 @@ body {
   font-size: 24px;
 }
 
+.sizes-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 12px 0;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.size-box {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  background-color: #f8f8f8;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Adiciona estilos para os botões */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
 @media (max-width: 1280px) {
   .logo {
     justify-content: center;
@@ -123,5 +168,11 @@ body {
 
   .logo p {
     font-size: 14px;
+  }
+
+  .search-container {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 12px;
   }
 }
