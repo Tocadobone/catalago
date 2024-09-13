@@ -1,0 +1,65 @@
+/* Estilos básicos para os produtos */
+* {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.logo {
+  display: flex;
+  margin: 38px 0 0 254px;
+}
+
+.logo div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo img {
+  width: 150px;
+  margin-right: 24px;
+}
+
+.product-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0 54px 0 54px;
+}
+
+.product {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  width: 350px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.product img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.product p {
+  margin: 5px 0;
+}
+
+/* Botão estilizado pelo Bootstrap */
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.bi-whatsapp {
+  margin-right: 5px;
+}
