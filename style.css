@@ -5,20 +5,51 @@
   padding: 0;
 }
 
-.logo {
-  display: flex;
-  margin: 38px 0 0 254px;
+body {
+  background: #f8f7f3;
 }
 
-.logo div {
+.nav {
+  background: #f8f7f3;
+  height: auto;
+  padding: 10px 0;
+}
+
+.logo {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo img {
-  width: 150px;
+  width: 64px;
+  height: 64px;
   margin-right: 24px;
+}
+
+.logo h1 {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.logo p {
+  font-size: 12px;
+  margin: 0;
+  color: #5e5e5e;
+}
+
+.search-input {
+  max-width: 300px;
+  margin-top: 10px;
+}
+
+/* Estilos para a barra de pesquisa em dispositivos móveis */
+@media (max-width: 768px) {
+  .search-input {
+    width: 100%;
+  }
 }
 
 .product-container {
@@ -26,7 +57,7 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 0 54px 0 54px;
+  padding: 0 54px;
 }
 
 .product {
@@ -35,7 +66,6 @@
   padding: 10px;
   width: 350px;
   text-align: center;
-  cursor: pointer;
 }
 
 .product img {
@@ -43,6 +73,7 @@
   height: auto;
   border-radius: 8px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .product p {
@@ -64,10 +95,26 @@
   margin-right: 5px;
 }
 
+.codigo {
+  font-size: 12px;
+  color: #5e5e5e;
+  margin: 0;
+  padding: 0;
+}
+
+.preco {
+  font-size: 18px;
+}
+
+.nome {
+  font-size: 24px;
+}
+
 @media (max-width: 1280px) {
   .logo {
-    display: flex;
-    margin: 32px 0 0 32px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 
   .logo h1 {
