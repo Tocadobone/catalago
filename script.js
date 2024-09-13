@@ -1,3 +1,15 @@
+// Variáveis globais para controlar os preços e a visibilidade
+const precoVarejo = 39.9; // Defina o valor de varejo aqui
+const precoAtacado = 18.0; // Defina o valor de atacado aqui
+const aparecerPrecoVarejo = false; // Defina como true ou false para mostrar ou esconder o preço de varejo
+const aparecerPrecoAtacado = false; // Defina como true ou false para mostrar ou esconder o preço de atacado
+
+const numeroCelular = "43999247640"; // Número de WhatsApp
+const mensagemWhatsApp = "Olá, vim do seu catálogo."; // Mensagem de WhatsApp
+
+const nomeEmpresa = "Toca do Boné"; // Nome da empresa
+const logoUrl = "./assets/logo.jpg"; // URL do logo
+
 const options = {
   method: "POST",
   headers: {
@@ -42,12 +54,37 @@ function displayProducts(products) {
 
     const namePara = document.createElement("p");
     namePara.textContent = productName;
+    namePara.classList.add("nome"); // Adiciona a classe "nome"
+
+    // Adiciona os preços logo abaixo do nome do produto
+    const priceContainer = document.createElement("div");
+
+    // Controle para exibir o preço de varejo
+    if (aparecerPrecoVarejo) {
+      const priceVarejoPara = document.createElement("p");
+      priceVarejoPara.textContent = `Varejo: R$${precoVarejo
+        .toFixed(2)
+        .replace(".", ",")}`;
+      priceContainer.appendChild(priceVarejoPara);
+    }
+
+    // Controle para exibir o preço de atacado
+    if (aparecerPrecoAtacado) {
+      const priceAtacadoPara = document.createElement("p");
+      priceAtacadoPara.textContent = `Atacado: R$${precoAtacado
+        .toFixed(2)
+        .replace(".", ",")}`;
+      priceContainer.appendChild(priceAtacadoPara);
+    }
 
     const codePara = document.createElement("p");
+    codePara.classList.add("codigo");
     codePara.textContent = `Código do produto: ${productCode}`;
 
     const contactButton = document.createElement("a");
-    contactButton.href = `https://wa.me/43999247640?text=Olá, vim do seu catálogo.`;
+    contactButton.href = `https://wa.me/${numeroCelular}?text=${encodeURIComponent(
+      mensagemWhatsApp
+    )}`; // URL para o WhatsApp
     contactButton.target = "_blank";
     contactButton.classList.add("btn", "btn-success", "mt-2", "mb-2");
 
@@ -59,6 +96,7 @@ function displayProducts(products) {
 
     productDiv.appendChild(img);
     productDiv.appendChild(namePara);
+    productDiv.appendChild(priceContainer); // Adiciona os preços abaixo do nome
     productDiv.appendChild(codePara);
     productDiv.appendChild(contactButton);
 
@@ -72,4 +110,10 @@ document.getElementById("search-input").addEventListener("input", (event) => {
     product.ProductName.toLowerCase().includes(searchTerm)
   );
   displayProducts(filteredProducts);
+});
+
+// Atualiza o HTML da página com o nome e o logo da empresa
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector(".logo img").src = logoUrl;
+  document.querySelector(".logo h1").textContent = nomeEmpresa;
 });
