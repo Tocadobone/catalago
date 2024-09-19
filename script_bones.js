@@ -44,6 +44,9 @@ const categories = {
   BONES: "bones-5panel-premium",
 };
 
+// Variável global para armazenar todos os produtos
+let allProducts = [];
+
 // Função para buscar produtos da API
 function fetchProducts(category) {
   const fetchOptions = {
@@ -66,7 +69,8 @@ function fetchProducts(category) {
     })
     .then((data) => {
       if (Array.isArray(data.list)) {
-        displayProducts(data.list);
+        allProducts = data.list; // Armazena todos os produtos
+        displayProducts(allProducts); // Exibe todos os produtos inicialmente
       } else {
         console.error("A resposta da API não contém uma lista de produtos.");
       }
@@ -149,6 +153,14 @@ function displayProducts(products) {
   });
 }
 
+// Função para filtrar produtos com base na pesquisa
+function filterProducts(searchTerm) {
+  const filteredProducts = allProducts.filter((product) =>
+    product.ProductName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  displayProducts(filteredProducts);
+}
+
 // Configuração inicial quando a página carrega
 document.addEventListener("DOMContentLoaded", () => {
   // Carregar todos os produtos inicialmente
@@ -209,5 +221,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (bannerImg) {
       bannerImg.src = bannerUrl;
     }
+  }
+
+  // Adiciona a funcionalidade de pesquisa
+  const searchInput = document.getElementById("search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", (event) => {
+      const searchTerm = event.target.value;
+      filterProducts(searchTerm);
+    });
   }
 });
