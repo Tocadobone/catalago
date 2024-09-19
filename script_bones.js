@@ -12,6 +12,12 @@ const nomeEmpresa = "Toca do Boné"; // Nome da empresa
 const logoUrl = "./assets/logo.jpg"; // URL do logo
 const mostrarLogo = true; // Defina como true ou false para mostrar ou esconder o logo
 
+const simulador = true; // Variável para mostrar ou não o botão Simulador
+
+// Variáveis globais para o banner
+const banner = false; // Defina como true para mostrar o banner ou false para ocultar
+const bannerUrl = "./assets/banner.png"; // URL do banner
+
 const options = {
   method: "POST",
   headers: {
@@ -32,19 +38,40 @@ const options = {
   }),
 };
 
-let bonesPremiumProductList = [];
+const categories = {
+  ALL: "",
+  CAMISETAS: "camisetas-peruana-401",
+  BONES: "bones-5panel-premium",
+};
 
-// Função para buscar e exibir os produtos da API Bones Premium
-function fetchBonesPremiumProducts() {
-  fetch("https://api.ecommerce.nextar.com/prod/api/products", options)
-    .then((response) => response.json())
-    .then((data) => {
-      bonesPremiumProductList = data.list; // Salvar a lista de produtos
-      displayProducts(bonesPremiumProductList); // Exibir produtos
+// Função para buscar produtos da API
+function fetchProducts(category) {
+  const fetchOptions = {
+    ...options,
+    body: JSON.stringify({
+      ...JSON.parse(options.body),
+      filter: {
+        ...JSON.parse(options.body).filter,
+        category: category,
+      },
+    }),
+  };
+
+  fetch("https://api.ecommerce.nextar.com/prod/api/products", fetchOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro na solicitação: " + response.statusText);
+      }
+      return response.json();
     })
-    .catch((err) =>
-      console.error("Erro ao buscar produtos Bones Premium:", err)
-    );
+    .then((data) => {
+      if (Array.isArray(data.list)) {
+        displayProducts(data.list);
+      } else {
+        console.error("A resposta da API não contém uma lista de produtos.");
+      }
+    })
+    .catch((err) => console.error("Erro ao buscar produtos:", err));
 }
 
 // Função para exibir os produtos
@@ -73,12 +100,10 @@ function displayProducts(products) {
 
     const namePara = document.createElement("p");
     namePara.textContent = productName;
-    namePara.classList.add("nome"); // Adiciona a classe "nome"
+    namePara.classList.add("nome");
 
-    // Adiciona os preços logo abaixo do nome do produto
     const priceContainer = document.createElement("div");
 
-    // Controle para exibir o preço de varejo
     if (aparecerPrecoVarejo) {
       const priceVarejoPara = document.createElement("p");
       priceVarejoPara.textContent = `Varejo: R$${precoVarejo
@@ -87,7 +112,6 @@ function displayProducts(products) {
       priceContainer.appendChild(priceVarejoPara);
     }
 
-    // Controle para exibir o preço de atacado
     if (aparecerPrecoAtacado) {
       const priceAtacadoPara = document.createElement("p");
       priceAtacadoPara.textContent = `Atacado: R$${precoAtacado
@@ -103,7 +127,7 @@ function displayProducts(products) {
     const contactButton = document.createElement("a");
     contactButton.href = `https://wa.me/${numeroCelular}?text=${encodeURIComponent(
       mensagemWhatsApp
-    )}`; // URL para o WhatsApp
+    )}`;
     contactButton.target = "_blank";
     contactButton.classList.add("btn", "btn-success", "mt-2", "mb-2");
 
@@ -115,10 +139,10 @@ function displayProducts(products) {
 
     productDiv.appendChild(img);
     productDiv.appendChild(namePara);
-    productDiv.appendChild(priceContainer); // Adiciona os preços abaixo do nome
+    productDiv.appendChild(priceContainer);
     productDiv.appendChild(codePara);
     if (mostrarNumeroCelular) {
-      productDiv.appendChild(contactButton); // Adiciona o botão de contato se a variável estiver true
+      productDiv.appendChild(contactButton);
     }
 
     container.appendChild(productDiv);
@@ -127,43 +151,63 @@ function displayProducts(products) {
 
 // Configuração inicial quando a página carrega
 document.addEventListener("DOMContentLoaded", () => {
-  fetchBonesPremiumProducts(); // Buscar e exibir produtos ao carregar a página
+  // Carregar todos os produtos inicialmente
+  fetchProducts(categories.ALL);
 
-  document.getElementById("bones-premium-btn").addEventListener("click", () => {
-    fetchBonesPremiumProducts(); // Atualizar produtos ao clicar no botão "Bones Premium"
-  });
+  // Configurar abas
+  const allTab = document.getElementById("all-products-tab");
+  const camisetasTab = document.getElementById("camisetas-peruanas-tab");
+  const bonesTab = document.getElementById("bones-premium-tab");
 
-  document.getElementById("search-input").addEventListener("input", (event) => {
-    const searchTerm = event.target.value.toLowerCase();
-    const filteredProducts = bonesPremiumProductList.filter((product) =>
-      product.ProductName.toLowerCase().includes(searchTerm)
-    );
+  if (allTab) {
+    allTab.addEventListener("click", () => {
+      fetchProducts(categories.ALL);
+    });
+  }
 
-    displayProducts(filteredProducts);
-  });
+  if (camisetasTab) {
+    camisetasTab.addEventListener("click", () => {
+      fetchProducts(categories.CAMISETAS);
+    });
+  }
 
-  // Atualiza o HTML da página com o nome e o logo da empresa
-  const logoContainer = document.querySelector(".logo");
+  if (bonesTab) {
+    bonesTab.addEventListener("click", () => {
+      fetchProducts(categories.BONES);
+    });
+  }
 
+  // Exibe o botão "Simulador" ao lado da barra de pesquisa se simulador for true
+  const simuladorButton = document.getElementById("simulador-btn");
+  if (simulador && simuladorButton) {
+    simuladorButton.style.display = "inline-block";
+    simuladorButton.addEventListener("click", () => {
+      window.location.href = "simulador.html"; // Redireciona para simulador.html
+    });
+  }
+
+  // Atualiza o HTML da página inicial com nome da empresa e logo, se necessário
   if (mostrarLogo) {
-    const logoImg = logoContainer.querySelector("img");
+    const logoImg = document.querySelector(".logo img");
+    const logoTitle = document.querySelector(".logo h1");
+
     if (logoImg) {
       logoImg.src = logoUrl;
-      logoImg.alt = nomeEmpresa;
-    } else {
-      const newLogoImg = document.createElement("img");
-      newLogoImg.src = logoUrl;
-      newLogoImg.alt = nomeEmpresa;
-      newLogoImg.classList.add("img-fluid");
-      logoContainer.prepend(newLogoImg);
     }
-  } else {
-    // Remove a logo se mostrarLogo for false
-    const logoImg = logoContainer.querySelector("img");
-    if (logoImg) {
-      logoImg.remove();
+
+    if (logoTitle) {
+      logoTitle.textContent = nomeEmpresa;
     }
   }
 
-  document.querySelector(".logo h1").textContent = nomeEmpresa;
+  // Exibe o banner se a variável banner for true
+  const bannerContainer = document.getElementById("banner-container");
+  if (banner && bannerContainer) {
+    bannerContainer.style.display = "block";
+    const bannerImg = document.getElementById("banner-img");
+
+    if (bannerImg) {
+      bannerImg.src = bannerUrl;
+    }
+  }
 });
